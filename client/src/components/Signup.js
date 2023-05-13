@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signup = (props) => {
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -28,10 +28,11 @@ const Signup = () => {
       console.log(json);
       if (json.success) {
         localStorage.setItem("token", json.authtoken);
-        navigate("/");
-      } else alert("Invalid Credentials");
+        navigate("/login");
+        props.showAlert("Account created successfully", "success");
+      } else props.showAlert("Invalid details provided", "danger");
     } else {
-      alert("Password does not match");
+      props.showAlert("Password does not match", "warning");
     }
   };
 
@@ -39,11 +40,12 @@ const Signup = () => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value });
   };
   return (
-    <div className="container">
+    <div className="container mt-2">
+      <h2>Create an account to use iNotebook</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Email address
+            Name
           </label>
           <input
             type="name"
@@ -66,6 +68,9 @@ const Signup = () => {
             id="email"
             aria-describedby="emailHelp"
           />
+          <div id="emailHelp" class="form-text">
+            We'll never share your email with anyone else.
+          </div>
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
